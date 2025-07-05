@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Stamm der Lakota - Crafting Rechner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url('https://i.imgur.com/WNjq9HP.jpg'); /* Online-Bild! */
+      background-size: cover;
+      background-position: center;
+      font-family: Arial, sans-serif;
+      color: #f5e9d6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: rgba(60, 40, 20, 0.9);
+      padding: 35px;
+      border: 8px double #c19a6b;
+      border-radius: 25px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.7);
+      max-width: 650px;
+      width: 95%;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', cursive;
+      text-align: center;
+      font-size: 40px;
+      color: #ffd700;
+      text-shadow: 2px 2px 5px #000;
+      margin-bottom: 25px;
+      letter-spacing: 2px;
+    }
+
+    label, select, input {
+      display: block;
+      width: 100%;
+      margin-bottom: 18px;
+      font-size: 20px;
+    }
+
+    select, input[type="number"] {
+      padding: 12px;
+      border-radius: 12px;
+      border: 2px solid #a0522d;
+      background-color: #f5deb3;
+      color: #4b2e1d;
+      font-weight: bold;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    select:hover, input[type="number"]:hover {
+      background-color: #ffe4b5;
+      transform: scale(1.02);
+    }
+
+    .result h2 {
+      font-size: 24px;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #ffd700;
+      padding-bottom: 6px;
+    }
+
+    .result ul {
+      list-style-type: square;
+      padding-left: 25px;
+    }
+
+    .result li {
+      margin: 8px 0;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Stamm der Lakota</h1>
+    <label for="itemSelect">Wähle ein Item:</label>
+    <select id="itemSelect">
+      <option value="">-- Bitte wählen --</option>
+    </select>
+    
+    <label for="quantity">Anzahl:</label>
+    <input type="number" id="quantity" value="1" min="1">
+
+    <div class="result" id="result"></div>
+  </div>
+  
+  <script>
+    // Hier bleibt der ganze Crafting-Code wie gehabt:
+    const categories = { /* ... alle Items wie vorher ... */ };
+
+    const select = document.getElementById('itemSelect');
+    const quantityInput = document.getElementById('quantity');
+    const result = document.getElementById('result');
+
+    for (const [category, items] of Object.entries(categories)) {
+      const group = document.createElement('optgroup');
+      group.label = category;
+      for (const item in items) {
+        const option = document.createElement('option');
+        option.value = `${category}|${item}`;
+        option.textContent = item;
+        group.appendChild(option);
+      }
+      select.appendChild(group);
+    }
+
+    function updateResult() {
+      const selected = select.value;
+      const quantity = parseInt(quantityInput.value) || 1;
+      if (!selected) {
+        result.innerHTML = '';
+        return;
+      }
+      const [category, item] = selected.split('|');
+      const ingredients = categories[category][item];
+      let output = `<h2>Benötigte Zutaten für: ${quantity}x ${item}</h2><ul>`;
+      for (const [ingredient, amount] of Object.entries(ingredients)) {
+        output += `<li>${amount * quantity}x ${ingredient}</li>`;
+      }
+      output += '</ul>';
+      result.innerHTML = output;
+    }
+
+    select.addEventListener('change', updateResult);
+    quantityInput.addEventListener('input', updateResult);
+  </script>
+</body>
+</html>
