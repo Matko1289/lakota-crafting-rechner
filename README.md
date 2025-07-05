@@ -1,1 +1,1 @@
-# lakota-crafting-rechner
+# lakota-crafting
